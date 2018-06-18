@@ -16,7 +16,6 @@ class ColumnHelper
 	const TYPE_DATE_TIME = 'dateTime';
 	const TYPE_BOOLEAN = 'boolean';
 	const TYPE_STATUS_ARRAY = 'statusArray';
-	const TYPE_STATUS_THREE_ARRAY = 'statusThreeArray';
 	const TYPE_IMAGE = 'image';
 
 	public static function columns(array $columns, $options = []) : array
@@ -159,18 +158,10 @@ class ColumnHelper
 		return static::prepare([], $queryOptions, $gridDefaultOptions, $gridOptions);
 	}
 
-	public static function statusThreeArrayColumn($attribute, $options = [], $gridOptions = [], $queryOptions = [])
-	{
-		if (!isset($options['icons'])) {
-			$options['icons'] = [0 => 'fa fa-coffee text-warning', 5 => 'fa fa-times text-danger', 10 => 'fa fa-check text-success'];
-		}
-		return static::booleanColumn($attribute, $options, $gridOptions, $queryOptions);
-	}
-
 	public static function statusArrayColumn($attribute, $options = [], $gridOptions = [], $queryOptions = [])
 	{
 		if (!isset($options['icons'])) {
-			$options['icons'] = [0 => 'glyphicon glyphicon-remove text-danger', 10 => 'glyphicon glyphicon-ok text-success'];
+			$options['icons'] = [0 => 'fa fa-times text-danger', 10 => 'fa fa-check text-success'];
 		}
 		return static::booleanColumn($attribute, $options, $gridOptions, $queryOptions);
 	}
@@ -194,39 +185,6 @@ class ColumnHelper
 		], $gridOptions);
 		return static::arrayColumn($attribute, $options, $gridOptions, $queryOptions);
 	}
-
-	/*public static function autoCompleteColumn($attribute, $options = [], $gridOptions = [], $queryOptions = [])
-	{
-		$valueText = ArrayHelper::getValue($options, 'valueText');
-		$options = array_replace_recursive([
-			'data' => null,
-		], $options);
-		//Если не установлен valueText, то пытаемся его сгенерировать сами основываясь на аттрибуте
-		//Например country_id -> в country и т.п.
-		if (!$valueText) {
-			$attributeExp = explode('_', $attribute);
-			unset($attributeExp[count($attributeExp) - 1]); //Убираем id
-			$valueRelated = implode('_', $attributeExp);
-			$valueAttribute = 'title';
-		}
-		$gridDefaultOptions = [
-			'filter' => [
-				'format' => 'autoComplete',
-				'data' => $options['data'],
-				'ajax' => [
-					'url' => $options['ajaxUrl']
-				],
-				'value' => $valueText ? $valueText : function ($model) use ($attribute, $valueRelated, $valueAttribute) {
-					return $model->$valueRelated->$valueAttribute;
-				}
-			],
-			'value' => $valueText ? $valueText : function ($model) use ($attribute) {
-				return $model->$attribute;
-			}
-		];
-		//print_R(array_replace_recursive($gridDefaultOptions, $gridOptions)); die();
-		return static::prepare([], $queryOptions, $gridDefaultOptions, $gridOptions);
-	}*/
 
 	public static function autoCompleteColumn($attribute, $options = [], $gridOptions = [], $queryOptions = [])
 	{
